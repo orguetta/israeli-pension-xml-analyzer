@@ -20,8 +20,8 @@
             background-color: rgba(79, 70, 229, 0.1) !important;
         }
         #chart-container {
-            min-height: 300px; /* Default height */
-            height: 400px; /* Increased height for better visibility */
+            min-height: 300px; 
+            height: 400px; 
         }
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
@@ -46,11 +46,11 @@
             background: #9ca3af;
         }
         .fas {
-            margin-left: 0.5rem; /* Adjusted for RTL icons */
+            margin-left: 0.5rem; 
             margin-right: 0;
         }
         .btn-icon .fas {
-             margin-left: 0.5rem; /* Ensure space between icon and text in buttons */
+             margin-left: 0.5rem; 
         }
         #drop-area .fa-file-upload {
              margin-left: 0; 
@@ -65,7 +65,12 @@
         }
         table th, table td {
             text-align: right;
+            white-space: nowrap; /* Prevent text wrapping in table cells by default */
         }
+        table th.truncate-text, table td.truncate-text {
+            white-space: normal; /* Allow wrapping for specific columns if needed */
+        }
+
         .chartjs-legend ul {
             direction: rtl;
         }
@@ -90,14 +95,14 @@
             @apply bg-teal-500 hover:bg-teal-600 text-white focus:ring-teal-500;
         }
         #processing-indicator {
-            display: none; /* Hidden by default */
+            display: none; 
             text-align: center;
             padding: 1rem;
-            color: #4f46e5; /* Indigo color for indicator */
+            color: #4f46e5; 
             font-weight: 500;
         }
         #no-data-message {
-             display: none; /* Hidden by default */
+             display: none; 
              text-align: center;
              padding: 2rem;
              margin-top:1rem;
@@ -110,11 +115,11 @@
 
         @media print {
             body {
-                font-size: 10pt;
+                font-size: 8pt; /* Reduced font size for print */
                 margin: 0;
                 padding: 0 !important; 
                 background-color: white !important;
-                font-family: 'Arial', sans-serif; /* Fallback for print */
+                font-family: 'Arial', sans-serif; 
             }
             header, section.mb-12, footer, #export-buttons, #drop-area button, #fileList, #processing-indicator, #no-data-message {
                 display: none !important;
@@ -123,33 +128,33 @@
                 display: block !important; 
                 box-shadow: none !important;
                 border: none !important;
-                margin-bottom: 10px !important;
+                margin-bottom: 5px !important; /* Reduced margin for print */
             }
             .container {
                 max-width: 100% !important;
-                padding: 10px !important;
+                padding: 5px !important; /* Reduced padding for print */
             }
             #chart-container {
-                min-height: 250px !important; 
-                height: auto !important; /* Let it adjust */
+                min-height: 200px !important; 
+                height: auto !important; 
                 page-break-inside: avoid;
             }
             canvas#pieChart {
                 max-width: 100% !important;
-                max-height: 300px !important; /* Allow more height in print */
+                max-height: 250px !important; 
             }
-             .grid, .grid-cols-1, .md\:grid-cols-3, .lg\:grid-cols-2 {
+             .grid, .grid-cols-1, .md\:grid-cols-3, .lg\:grid-cols-5 { /* Adjusted for new layout */
                 grid-template-columns: repeat(1, minmax(0, 1fr)) !important; 
             }
             table {
                 width: 100% !important;
                 border-collapse: collapse !important;
                 page-break-inside: auto;
+                 font-size: 7pt; /* Further reduced table font for print */
             }
             th, td {
                 border: 1px solid #ccc !important;
-                padding: 4px !important;
-                font-size: 9pt !important;
+                padding: 2px !important; /* Reduced padding for print */
             }
             thead {
                 display: table-header-group !important; 
@@ -160,19 +165,20 @@
             }
             .bg-white { background-color: white !important; }
             .p-6 { padding: 0 !important; }
-            .mb-8 { margin-bottom: 1cm !important; }
-            h1, h2 {
-                page-break-after: avoid;
-            }
-            /* Ensure chart.js legend is styled for print if needed */
+            .mb-8 { margin-bottom: 0.5cm !important; } /* Reduced margin */
+            h1 { font-size: 16pt !important; }
+            h2 { font-size: 12pt !important; page-break-after: avoid; }
+            .text-3xl { font-size: 14pt !important; }
+            .text-base { font-size: 9pt !important; }
+
             .chartjs-legend {
-                font-size: 8pt !important;
+                font-size: 7pt !important;
             }
         }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen text-gray-800">
-    <div class="container mx-auto px-4 py-8 max-w-6xl">
+    <div class="container mx-auto px-4 py-8 max-w-full xl:max-w-7xl"> <!-- Adjusted max-width for wider screens -->
         <header class="mb-10 text-center">
             <h1 class="text-4xl md:text-5xl font-bold text-indigo-700 mb-3">מנתח XML פנסיוני ישראלי</h1>
             <p class="text-gray-600 max-w-2xl mx-auto text-lg">העלה קובץ XML אחד או יותר מהמסלקה הפנסיונית או מספקי פנסיה ישראליים כדי לנתח את הקרנות, דמי הניהול ומסלולי ההשקעה שלך.</p>
@@ -228,31 +234,36 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-8">
-                <div class="lg:col-span-2 bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+            <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 mb-8"> <!-- Changed to 1 column for the main table section -->
+                <!-- Chart can be here or in a separate section if layout becomes too crowded -->
+                 <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
                     <h2 class="text-2xl font-semibold text-gray-800 mb-4">התפלגות נכסים לפי סוג מוצר</h2>
                     <div id="chart-container" class="relative">
                         <canvas id="pieChart"></canvas>
                     </div>
                 </div>
-                <div class="lg:col-span-3 bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+                <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
                     <h2 class="text-2xl font-semibold text-gray-800 mb-4">פירוט חשבונות/קרנות</h2>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-100">
                                 <tr>
-                                    <th scope="col" class="px-5 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">ספק</th>
-                                    <th scope="col" class="px-5 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">שם התוכנית</th>
-                                    <th scope="col" class="px-5 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">סוג מוצר</th>
-                                    <th scope="col" class="px-5 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">יתרה</th>
-                                    <th scope="col" class="px-5 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">דמי ניהול (הפקדה / צבירה שנתית)</th>
-                                    <th scope="col" class="px-5 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">מסלול השקעה</th>
+                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">ספק</th>
+                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">שם התוכנית</th>
+                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">סוג מוצר</th>
+                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">יתרה</th>
+                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">מסלול השקעה</th>
+                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">ד"נ הפקדה (נטו)</th>
+                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">ד"נ צבירה שנתית (נטו)</th>
+                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">תוקף הטבה ד"נ</th>
+                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">הפקדה אחרונה</th>
+                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">ת. הפקדה אחרונה</th>
+                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">שכר להפקדה אחרונה</th>
                                 </tr>
                             </thead>
                             <tbody id="funds-table-body" class="bg-white divide-y divide-gray-200">
-                                <!-- Placeholder for no data -->
                                 <tr id="no-data-table-row" style="display: none;">
-                                    <td colspan="6" class="px-6 py-10 text-center text-gray-500">לא נמצאו נתונים להצגה.</td>
+                                    <td colspan="11" class="px-6 py-10 text-center text-gray-500">לא נמצאו נתונים להצגה.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -289,14 +300,12 @@
             let pieChart = null;
             let allFundData = [];
 
-            // Initialize Chart.js defaults for Inter font
             Chart.defaults.font.family = "'Inter', sans-serif";
             Chart.defaults.font.size = 12; 
             Chart.defaults.color = '#374151'; 
 
-            initEmptyChart(); // Initialize an empty chart on page load
+            initEmptyChart(); 
 
-            // Drag and drop event listeners
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
                 dropArea.addEventListener(eventName, preventDefaults, false);
             });
@@ -334,7 +343,6 @@
                 handleFiles({target: {files}}); 
             }
 
-            // Event listeners for file input
             dropArea.addEventListener('drop', handleDrop, false);
             browseBtn.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', handleFiles);
@@ -385,8 +393,7 @@
                             updateResultsUI();
                         } else {
                             console.log("לא חולצו נתונים מאף קובץ XML תקין, או שהקבצים לא הכילו מידע רלוונטי.");
-                            // Ensure empty chart is shown if no data after processing all files
-                            if(pieChart) pieChart.destroy(); // Destroy existing chart before re-initializing empty
+                            if(pieChart) pieChart.destroy(); 
                             initEmptyChart(); 
                             resultsContainer.style.display = 'none';
                             generalNoDataMessage.style.display = 'block';
@@ -403,9 +410,7 @@
                     fileItem.dataset.fileName = file.name; 
                     fileList.appendChild(fileItem);
                 }
-
                 let bgColor, borderColor, iconClass, iconColor, statusText;
-
                 switch(status) {
                     case 'success':
                         bgColor = 'bg-green-50'; borderColor = 'border-green-300'; iconClass = 'fa-check-circle'; iconColor = 'text-green-600'; statusText = message || 'עובד בהצלחה';
@@ -421,19 +426,15 @@
                         bgColor = 'bg-blue-50'; borderColor = 'border-blue-300'; iconClass = 'fa-spinner fa-spin'; iconColor = 'text-blue-600'; statusText = 'מעבד...';
                         break;
                 }
-
                 fileItem.className = `flex items-center p-3 rounded-md border ${bgColor} ${borderColor}`;
-                
                 fileItem.innerHTML = `
                     <i class="fas ${iconClass} ${iconColor} file-item-icon text-lg"></i>
                     <div class="flex-1 truncate mr-3">
                         <p class="text-sm font-medium text-gray-800 truncate">${file.name}</p>
                         <p class="text-xs ${status === 'error' ? 'text-red-700' : (status === 'warning' ? 'text-yellow-700' : 'text-gray-500')}">${formatFileSize(file.size)}${statusText ? ` - ${statusText}` : ''}</p>
-                    </div>
-                `;
+                    </div>`;
                 return fileItem; 
             }
-
 
             function formatFileSize(bytes) { 
                 if (bytes === 0) return '0 Bytes';
@@ -467,7 +468,7 @@
                            allFundData.push(...fundDataListFromFile); 
                            success = true;
                         } else {
-                            success = true; // Still counts as successful parse even if no relevant data
+                            success = true; 
                         }
                     } catch (error) {
                         message = 'שגיאה פנימית בעיבוד הקובץ.';
@@ -494,6 +495,36 @@
                 return productMap[code] || 'אחר';
             }
 
+            // Helper function to safely get text content from a node
+            function getText(node, query, defaultValue = '') {
+                const el = node.querySelector(query);
+                return el && el.textContent ? el.textContent.trim() : defaultValue;
+            }
+
+            // Helper function to safely get float attribute from a node
+            function getFloat(node, query, defaultValue = 0) {
+                const el = node.querySelector(query);
+                return el && el.textContent ? parseFloat(el.textContent.trim()) : defaultValue;
+            }
+            
+            function formatDate(yyyymmdd) {
+                if (!yyyymmdd || yyyymmdd.length < 8) return '-';
+                const year = yyyymmdd.substring(0, 4);
+                const month = yyyymmdd.substring(4, 6);
+                const day = yyyymmdd.substring(6, 8);
+                // Check if day is valid (e.g., not '00')
+                if (day === '00') return `${month}/${year}`; // Only month/year if day is invalid
+                return `${day}/${month}/${year}`;
+            }
+            
+            function formatYearMonth(yyyymm) {
+                if (!yyyymm || yyyymm.length < 6) return '-';
+                const year = yyyymm.substring(0, 4);
+                const month = yyyymm.substring(4, 6);
+                return `${month}/${year}`;
+            }
+
+
             function extractDataFromXML(xmlDoc) {
                 const funds = [];
                 let providerNameNode = xmlDoc.querySelector('YeshutYatzran > SHEM-YATZRAN');
@@ -511,43 +542,104 @@
 
                     const accounts = mutzarNode.querySelectorAll('HeshbonotOPolisot > HeshbonOPolisa');
                     accounts.forEach(accountNode => {
-                        const shemTochnitNode = accountNode.querySelector('SHEM-TOCHNIT');
-                        const productDisplayName = shemTochnitNode ? shemTochnitNode.textContent.trim() : genericProductType;
-
+                        const productDisplayName = getText(accountNode, 'SHEM-TOCHNIT', genericProductType);
                         let currentBalance = 0;
-                        const yitrotBlocks = accountNode.querySelectorAll('PirteiTaktziv > BlockItrot > Yitrot');
-                        yitrotBlocks.forEach(yitraBlock => {
-                            const perutYitrotNodes = yitraBlock.querySelectorAll('PerutYitrot > TOTAL-CHISACHON-MTZBR');
-                            perutYitrotNodes.forEach(yitraNode => {
-                                currentBalance += parseFloat(yitraNode.textContent) || 0;
-                            });
+                        // Sum balances from all 'PirteiTaktziv' segments
+                        const pirteiTaktzivNodes = accountNode.querySelectorAll('PirteiTaktziv');
+                        pirteiTaktzivNodes.forEach(taktzivNode => {
+                            const blockItrot = taktzivNode.querySelector('BlockItrot > Yitrot');
+                            if (blockItrot) {
+                                const perutYitrotNodes = blockItrot.querySelectorAll('PerutYitrot > TOTAL-CHISACHON-MTZBR');
+                                perutYitrotNodes.forEach(yitraNode => {
+                                    currentBalance += parseFloat(yitraNode.textContent) || 0;
+                                });
+                            }
+                            // Fallback if TOTAL-CHISACHON-MTZBR is not found or zero, sum SCHUM-TZVIRA-BAMASLUL
+                            if (currentBalance === 0) {
+                                const masluleiHashkaaBalanceNodes = taktzivNode.querySelectorAll('PerutMasluleiHashkaa > SCHUM-TZVIRA-BAMASLUL');
+                                masluleiHashkaaBalanceNodes.forEach(schumNode => {
+                                    currentBalance += parseFloat(schumNode.textContent) || 0;
+                                });
+                            }
                         });
-                        if (currentBalance === 0) { 
-                            const masluleiHashkaaBalanceNodes = accountNode.querySelectorAll('PirteiTaktziv > PerutMasluleiHashkaa > SCHUM-TZVIRA-BAMASLUL');
-                            masluleiHashkaaBalanceNodes.forEach(schumNode => {
-                                currentBalance += parseFloat(schumNode.textContent) || 0;
-                            });
-                        }
+
 
                         let depositFee = 0;
                         let balanceFeeAnnual = 0; 
+                        let effectiveDepositFee = 0;
+                        let effectiveBalanceFeeAnnual = 0;
+                        let feeBenefitEndDate = '-';
                         let trackName = 'ברירת מחדל';
+                        
+                        let lastDepositDate = '-';
+                        let lastDepositAmount = 0;
+                        let lastDepositSalaryMonth = '-';
 
+
+                        // Use the first PirteiTaktziv for fees, track name, and last deposit.
+                        // This is a simplification as these could vary per Taktziv (employer segment)
                         const firstPirteiTaktziv = accountNode.querySelector('PirteiTaktziv');
                         if (firstPirteiTaktziv) {
+                            // Extract fees and benefits
                             const hotzaotNode = firstPirteiTaktziv.querySelector('PerutHotzaot > HotzaotBafoalLehodeshDivoach');
+                            const mivneDmeiNihulNodes = firstPirteiTaktziv.querySelectorAll('PerutHotzaot > MivneDmeiNihul > PerutMivneDmeiNihul');
+
                             if (hotzaotNode) {
-                                const depositFeeNode = hotzaotNode.querySelector('SHEUR-DMEI-NIHUL-HAFKADA');
-                                depositFee = depositFeeNode ? parseFloat(depositFeeNode.textContent) : 0;
-                                
-                                const balanceFeeMonthlyNode = hotzaotNode.querySelector('SHEUR-DMEI-NIHUL-TZVIRA');
-                                const balanceFeeMonthly = balanceFeeMonthlyNode ? parseFloat(balanceFeeMonthlyNode.textContent) : 0;
-                                balanceFeeAnnual = parseFloat((balanceFeeMonthly * 12).toFixed(4)); 
+                                depositFee = getFloat(hotzaotNode, 'SHEUR-DMEI-NIHUL-HAFKADA');
+                                const balanceFeeMonthly = getFloat(hotzaotNode, 'SHEUR-DMEI-NIHUL-TZVIRA');
+                                balanceFeeAnnual = parseFloat((balanceFeeMonthly * 12).toFixed(4));
                             }
+                            
+                            // Default effective fees to base fees
+                            effectiveDepositFee = depositFee;
+                            effectiveBalanceFeeAnnual = balanceFeeAnnual;
+
+                            mivneDmeiNihulNodes.forEach(mivneNode => {
+                                const sugHotzaa = getText(mivneNode, 'SUG-HOTZAA');
+                                const sheurDmeiNihulBase = getFloat(mivneNode, 'SHEUR-DMEI-NIHUL');
+                                const kayemetHatava = getText(mivneNode, 'KAYEMET-HATAVA') === '1';
+
+                                if (kayemetHatava) {
+                                    const achozHatava = getFloat(mivneNode, 'ACHOZ-HATAVA');
+                                    const sheurDmeiNihulEffective = sheurDmeiNihulBase * (1 - (achozHatava / 100));
+                                    const endDate = formatDate(getText(mivneNode, 'TAARICH-SIUM-HATAVA'));
+                                    if (endDate !== '-') feeBenefitEndDate = endDate; // Take the latest benefit end date if multiple
+
+                                    if (sugHotzaa === '1') { // דמי ניהול מצבירה
+                                        effectiveBalanceFeeAnnual = parseFloat((sheurDmeiNihulEffective / 100 * 12).toFixed(4)); // Assuming SHEUR-DMEI-NIHUL is annual for צבירה if SUG_HOTZAA is 1
+                                        // If SHEUR-DMEI-NIHUL under Mivne is monthly, then: sheurDmeiNihulEffective * 12
+                                        // The source XML usually provides SHEUR-DMEI-NIHUL as an annual rate for הצבירה in Mivne.
+                                        // Let's assume SHEUR-DMEI-NIHUL is annual for צבירה in Mivne if no better info
+                                        // But the HotzaotBafoalLehodeshDivoach.SHEUR-DMEI-NIHUL-TZVIRA is monthly.
+                                        // For simplicity, we'll use the calculation from HotzaotBafoal as primary if Mivne calculation isn't clear.
+                                        // Let's assume MivneDmeiNihul.SHEUR-DMEI-NIHUL for SUG-HOTZAA '1' (צבירה) is already an annual rate in percentage.
+                                         effectiveBalanceFeeAnnual = parseFloat(sheurDmeiNihulEffective.toFixed(4));
+
+                                    } else if (sugHotzaa === '2') { // דמי ניהול מהפקדה
+                                        effectiveDepositFee = parseFloat(sheurDmeiNihulEffective.toFixed(4));
+                                    }
+                                } else { // No benefit, use base rate from Mivne if available and different from HotzaotBafoal
+                                    if (sugHotzaa === '1') effectiveBalanceFeeAnnual = parseFloat(sheurDmeiNihulBase.toFixed(4));
+                                    else if (sugHotzaa === '2') effectiveDepositFee = parseFloat(sheurDmeiNihulBase.toFixed(4));
+                                }
+                            });
+
 
                             const trackNode = firstPirteiTaktziv.querySelector('PerutMasluleiHashkaa > SHEM-MASLUL-HASHKAA');
                             if (trackNode) {
                                 trackName = trackNode.textContent.trim() || 'ברירת מחדל';
+                            }
+
+                            // Extract Last Deposit Info
+                            const hafkadaAchronaBlock = firstPirteiTaktziv.querySelector('PirteiHafkadaAchrona > PerutPirteiHafkadaAchrona');
+                            if (hafkadaAchronaBlock) {
+                                lastDepositDate = formatYearMonth(getText(hafkadaAchronaBlock, 'TAARICH-HAFKADA-ACHARON'));
+                                lastDepositAmount = getFloat(hafkadaAchronaBlock, 'TOTAL-HAFKADA-ACHRONA');
+                                // Get CHODESH-SACHAR from the first PerutHafkadaAchrona
+                                const chodeshSacharNode = hafkadaAchronaBlock.querySelector('PerutHafkadaAchrona > CHODESH-SACHAR');
+                                if(chodeshSacharNode && chodeshSacharNode.textContent){
+                                    lastDepositSalaryMonth = formatYearMonth(chodeshSacharNode.textContent.trim());
+                                }
                             }
                         }
                         
@@ -557,9 +649,19 @@
                                 productDisplayName: productDisplayName,
                                 productType: genericProductType,
                                 balance: currentBalance,
-                                depositFee: depositFee,
+                                // Base fees (from HotzaotBafoal as primary for display consistency)
+                                depositFee: depositFee, 
                                 balanceFee: balanceFeeAnnual,
-                                trackName: trackName
+                                // Effective fees after benefit
+                                effectiveDepositFee: effectiveDepositFee,
+                                effectiveBalanceFee: effectiveBalanceFeeAnnual,
+                                feeBenefitEndDate: feeBenefitEndDate,
+                                // Track
+                                trackName: trackName,
+                                // Last Deposit
+                                lastDepositDate: lastDepositDate,
+                                lastDepositAmount: lastDepositAmount,
+                                lastDepositSalaryMonth: lastDepositSalaryMonth
                             });
                         }
                     });
@@ -605,25 +707,40 @@
                 allFundData.sort((a, b) => b.balance - a.balance)
                     .forEach(fund => {
                         const row = fundsTableBody.insertRow();
-                        row.className = 'hover:bg-gray-50 transition-colors duration-150';
+                        row.className = 'hover:bg-gray-50 transition-colors duration-150 text-sm';
                         
                         row.insertCell().textContent = fund.provider;
-                        row.cells[0].className = 'px-5 py-3 whitespace-nowrap text-sm font-medium text-gray-800';
+                        row.cells[0].className = 'px-4 py-2 font-medium text-gray-800';
                         
                         row.insertCell().textContent = fund.productDisplayName;
-                        row.cells[1].className = 'px-5 py-3 whitespace-nowrap text-sm text-gray-600';
+                        row.cells[1].className = 'px-4 py-2 text-gray-600';
 
                         row.insertCell().textContent = fund.productType;
-                        row.cells[2].className = 'px-5 py-3 whitespace-nowrap text-sm text-gray-600';
+                        row.cells[2].className = 'px-4 py-2 text-gray-600';
                         
                         row.insertCell().textContent = `₪${fund.balance.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                        row.cells[3].className = 'px-5 py-3 whitespace-nowrap text-sm text-gray-800 font-semibold';
-                        
-                        row.insertCell().textContent = `${fund.depositFee.toFixed(4)}% / ${fund.balanceFee.toFixed(4)}%`;
-                        row.cells[4].className = 'px-5 py-3 whitespace-nowrap text-sm text-gray-600';
-                        
+                        row.cells[3].className = 'px-4 py-2 text-gray-800 font-semibold';
+                                               
                         row.insertCell().textContent = fund.trackName;
-                        row.cells[5].className = 'px-5 py-3 whitespace-nowrap text-sm text-gray-600 truncate max-w-xs';
+                        row.cells[4].className = 'px-4 py-2 text-gray-600 truncate max-w-xs';
+                        
+                        row.insertCell().textContent = `${(fund.effectiveDepositFee).toFixed(4)}%`;
+                        row.cells[5].className = 'px-4 py-2 text-gray-600';
+
+                        row.insertCell().textContent = `${(fund.effectiveBalanceFee).toFixed(4)}%`;
+                        row.cells[6].className = 'px-4 py-2 text-gray-600';
+                        
+                        row.insertCell().textContent = fund.feeBenefitEndDate;
+                        row.cells[7].className = 'px-4 py-2 text-gray-600';
+
+                        row.insertCell().textContent = `₪${fund.lastDepositAmount.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                        row.cells[8].className = 'px-4 py-2 text-gray-600';
+                        
+                        row.insertCell().textContent = fund.lastDepositDate;
+                        row.cells[9].className = 'px-4 py-2 text-gray-600';
+                        
+                        row.insertCell().textContent = fund.lastDepositSalaryMonth;
+                        row.cells[10].className = 'px-4 py-2 text-gray-600';
                     });
             }
 
@@ -680,11 +797,11 @@
                 }
 
                 if (pieChart) {
-                    pieChart.destroy(); // Destroy existing chart instance before creating a new one
+                    pieChart.destroy(); 
                 }
 
                 if (!allFundData || allFundData.length === 0) {
-                    initEmptyChart(); // Re-initialize with empty state if no data
+                    initEmptyChart(); 
                     return;
                 }
 
@@ -705,7 +822,7 @@
                     '#7c3aed', '#047857' 
                 ].slice(0, productTypesForChart.length);
                 
-                pieChart = new Chart(ctx, { // Create a new chart instance
+                pieChart = new Chart(ctx, { 
                     type: 'pie',
                     data: {
                         labels: productTypesForChart,
@@ -719,7 +836,7 @@
                     },
                     options: {
                         responsive: true,
-                        maintainAspectRatio: false, // Important for Safari and responsiveness
+                        maintainAspectRatio: false, 
                         plugins: {
                             legend: {
                                 position: 'bottom',
@@ -756,7 +873,11 @@
                     return;
                 }
 
-                const headers = ['ספק', 'שם התוכנית', 'סוג מוצר', 'יתרה (₪)', 'דמי ניהול מהפקדה (%)', 'דמי ניהול מצבירה שנתית (%)', 'מסלול השקעה'];
+                const headers = [
+                    'ספק', 'שם התוכנית', 'סוג מוצר', 'יתרה (₪)', 'מסלול השקעה', 
+                    'ד"נ הפקדה נטו (%)', 'ד"נ צבירה שנתית נטו (%)', 'תוקף הטבה ד"נ',
+                    'סכום הפקדה אחרונה (₪)', 'תאריך הפקדה אחרונה', 'חודש שכר להפקדה אחרונה'
+                ];
                 const csvRows = [];
                 csvRows.push(headers.join(','));
 
@@ -766,9 +887,13 @@
                         `"${fund.productDisplayName.replace(/"/g, '""')}"`,
                         `"${fund.productType.replace(/"/g, '""')}"`,
                         fund.balance.toFixed(2),
-                        fund.depositFee.toFixed(4),
-                        fund.balanceFee.toFixed(4),
-                        `"${fund.trackName.replace(/"/g, '""')}"`
+                        `"${fund.trackName.replace(/"/g, '""')}"`,
+                        fund.effectiveDepositFee.toFixed(4),
+                        fund.effectiveBalanceFee.toFixed(4),
+                        `"${fund.feeBenefitEndDate.replace(/"/g, '""')}"`,
+                        fund.lastDepositAmount.toFixed(2),
+                        `"${fund.lastDepositDate.replace(/"/g, '""')}"`,
+                        `"${fund.lastDepositSalaryMonth.replace(/"/g, '""')}"`
                     ];
                     csvRows.push(row.join(','));
                 });
@@ -780,7 +905,7 @@
                 if (link.download !== undefined) { 
                     const url = URL.createObjectURL(blob);
                     link.setAttribute('href', url);
-                    link.setAttribute('download', 'נתוני_פנסיה.csv');
+                    link.setAttribute('download', 'נתוני_פנסיה_מפורט.csv');
                     link.style.visibility = 'hidden';
                     document.body.appendChild(link);
                     link.click();
