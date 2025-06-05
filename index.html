@@ -21,7 +21,8 @@
         }
         #chart-container {
             min-height: 300px; 
-            height: 400px; 
+            height: 350px; 
+            position: relative; 
         }
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
@@ -65,10 +66,10 @@
         }
         table th, table td {
             text-align: right;
-            white-space: nowrap; /* Prevent text wrapping in table cells by default */
+            white-space: nowrap; 
         }
         table th.truncate-text, table td.truncate-text {
-            white-space: normal; /* Allow wrapping for specific columns if needed */
+            white-space: normal; 
         }
 
         .chartjs-legend ul {
@@ -94,6 +95,9 @@
         .button-tertiary {
             @apply bg-teal-500 hover:bg-teal-600 text-white focus:ring-teal-500;
         }
+        .button-ai {
+            @apply bg-purple-500 hover:bg-purple-600 text-white text-xs px-2 py-1 rounded-md;
+        }
         #processing-indicator {
             display: none; 
             text-align: center;
@@ -111,28 +115,106 @@
              border-radius: 0.5rem;
              color: #6b7280;
         }
+        .summary-card-original { /* For original summary boxes */
+            @apply p-5 rounded-lg border text-center;
+        }
+        .summary-card-original .label {
+            @apply text-sm font-medium mb-1;
+        }
+        .summary-card-original .value {
+             @apply text-2xl md:text-3xl font-bold break-all;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.5); 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .modal-content {
+            background-color: #fefefe;
+            padding: 25px;
+            border: 1px solid #888;
+            width: 90%; 
+            max-width: 650px; 
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-close {
+            color: #aaa;
+            float: left; 
+            font-size: 32px;
+            font-weight: bold;
+            line-height: 1;
+        }
+        .modal-close:hover,
+        .modal-close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-body {
+            min-height: 100px; 
+            max-height: 70vh; 
+            overflow-y: auto;
+            padding-top: 10px;
+            line-height: 1.7; 
+            text-align: right; 
+        }
+        .modal-body h4 { 
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-top: 0.75em;
+            margin-bottom: 0.25em;
+        }
+        .modal-body ul, .modal-body ol {
+            margin-right: 1.5em; 
+            margin-bottom: 0.75em;
+        }
+        .modal-body li {
+            margin-bottom: 0.3em;
+        }
+        .modal-disclaimer {
+            @apply mt-6 pt-4 border-t border-gray-300 text-xs text-gray-500 text-center;
+        }
+
+        .modal-loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
 
 
         @media print {
             body {
-                font-size: 8pt; /* Reduced font size for print */
+                font-size: 8pt; 
                 margin: 0;
                 padding: 0 !important; 
                 background-color: white !important;
                 font-family: 'Arial', sans-serif; 
             }
-            header, section.mb-12, footer, #export-buttons, #drop-area button, #fileList, #processing-indicator, #no-data-message {
+            header, section.mb-12, footer, #export-buttons, #drop-area button, #fileList, #processing-indicator, #no-data-message, .modal, .ai-analysis-column, #api-key-section { 
                 display: none !important;
             }
             #results-container, #results-container > div {
                 display: block !important; 
                 box-shadow: none !important;
                 border: none !important;
-                margin-bottom: 5px !important; /* Reduced margin for print */
+                margin-bottom: 5px !important; 
             }
             .container {
                 max-width: 100% !important;
-                padding: 5px !important; /* Reduced padding for print */
+                padding: 5px !important; 
             }
             #chart-container {
                 min-height: 200px !important; 
@@ -143,18 +225,31 @@
                 max-width: 100% !important;
                 max-height: 250px !important; 
             }
-             .grid, .grid-cols-1, .md\:grid-cols-3, .lg\:grid-cols-5 { /* Adjusted for new layout */
+             .grid, .grid-cols-1, .md\:grid-cols-3, .lg\:grid-cols-2, .xl\:grid-cols-1 { 
                 grid-template-columns: repeat(1, minmax(0, 1fr)) !important; 
+            }
+            .summary-card-print { 
+                page-break-inside: avoid;
+                padding: 5px !important;
+                border: 1px solid #eee !important;
+            }
+            .summary-card-print .label {
+                font-size: 8pt !important;
+                margin-bottom: 2px !important;
+            }
+             .summary-card-print .value {
+                font-size: 10pt !important; 
+                font-weight: bold;
             }
             table {
                 width: 100% !important;
                 border-collapse: collapse !important;
                 page-break-inside: auto;
-                 font-size: 7pt; /* Further reduced table font for print */
+                 font-size: 7pt; 
             }
             th, td {
                 border: 1px solid #ccc !important;
-                padding: 2px !important; /* Reduced padding for print */
+                padding: 2px !important; 
             }
             thead {
                 display: table-header-group !important; 
@@ -165,11 +260,12 @@
             }
             .bg-white { background-color: white !important; }
             .p-6 { padding: 0 !important; }
-            .mb-8 { margin-bottom: 0.5cm !important; } /* Reduced margin */
+            .mb-8 { margin-bottom: 0.5cm !important; } 
             h1 { font-size: 16pt !important; }
             h2 { font-size: 12pt !important; page-break-after: avoid; }
-            .text-3xl { font-size: 14pt !important; }
+            .text-lg { font-size: 10pt !important; } 
             .text-base { font-size: 9pt !important; }
+
 
             .chartjs-legend {
                 font-size: 7pt !important;
@@ -178,10 +274,11 @@
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen text-gray-800">
-    <div class="container mx-auto px-4 py-8 max-w-full xl:max-w-7xl"> <!-- Adjusted max-width for wider screens -->
-        <header class="mb-10 text-center">
+    <div class="container mx-auto px-4 py-8 max-w-full xl:max-w-7xl"> 
+        <header class="mb-10 text-center"> <!-- Increased bottom margin for header -->
             <h1 class="text-4xl md:text-5xl font-bold text-indigo-700 mb-3">מנתח XML פנסיוני ישראלי</h1>
-            <p class="text-gray-600 max-w-2xl mx-auto text-lg">העלה קובץ XML אחד או יותר מהמסלקה הפנסיונית או מספקי פנסיה ישראליים כדי לנתח את הקרנות, דמי הניהול ומסלולי ההשקעה שלך.</p>
+            <h3 class="text-xl md:text-2xl font-semibold text-gray-800 mb-4">מבית Finely</h3>
+            <p class="text-gray-600 max-w-2xl mx-auto text-lg">העלה קובץ XML אחד או יותר מהמסלקה הפנסיונית כדי לנתח את הקרנות, דמי הניהול ומסלולי ההשקעה שלך. כעת עם ניתוחי AI ✨!</p>
         </header>
 
         <section class="mb-12 bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-200">
@@ -218,63 +315,88 @@
                         </button>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-blue-50 p-5 rounded-lg border border-blue-200 text-center">
-                        <p class="text-base text-blue-600 font-medium mb-1">יתרה כוללת</p>
-                        <p id="total-balance" class="text-3xl font-bold text-blue-700">₪0</p>
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 text-center summary-card-print">
+                        <p class="text-sm text-blue-600 font-medium label">יתרה כוללת</p>
+                        <p id="total-balance" class="text-2xl font-bold text-blue-700 value">₪0</p>
                     </div>
-                    <div class="bg-green-50 p-5 rounded-lg border border-green-200 text-center">
-                        <p class="text-base text-green-600 font-medium mb-1">ספקים</p>
-                        <p id="total-providers" class="text-3xl font-bold text-green-700">0</p>
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-100 text-center summary-card-print">
+                        <p class="text-sm text-green-600 font-medium label">ספקים</p>
+                        <p id="total-providers" class="text-2xl font-bold text-green-700 value">0</p>
                     </div>
-                    <div class="bg-purple-50 p-5 rounded-lg border border-purple-200 text-center">
-                        <p class="text-base text-purple-600 font-medium mb-1">מוצרים/חשבונות</p>
-                        <p id="total-products" class="text-3xl font-bold text-purple-700">0</p>
+                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-100 text-center summary-card-print">
+                        <p class="text-sm text-purple-600 font-medium label">מוצרים/חשבונות</p>
+                        <p id="total-products" class="text-2xl font-bold text-purple-700 value">0</p>
                     </div>
                 </div>
             </div>
-
-            <div class="grid grid-cols-1 xl:grid-cols-1 gap-8 mb-8"> <!-- Changed to 1 column for the main table section -->
-                <!-- Chart can be here or in a separate section if layout becomes too crowded -->
-                 <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">התפלגות נכסים לפי סוג מוצר</h2>
-                    <div id="chart-container" class="relative">
-                        <canvas id="pieChart"></canvas>
-                    </div>
+            
+            <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 mb-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">התפלגות נכסים לפי סוג מוצר</h2>
+                <div id="chart-container" class="relative w-full">
+                    <canvas id="pieChart"></canvas>
                 </div>
-                <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">פירוט חשבונות/קרנות</h2>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-100">
-                                <tr>
-                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">ספק</th>
-                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">שם התוכנית</th>
-                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">סוג מוצר</th>
-                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">יתרה</th>
-                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">מסלול השקעה</th>
-                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">ד"נ הפקדה (נטו)</th>
-                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">ד"נ צבירה שנתית (נטו)</th>
-                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">תוקף הטבה ד"נ</th>
-                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">הפקדה אחרונה</th>
-                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">ת. הפקדה אחרונה</th>
-                                    <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">שכר להפקדה אחרונה</th>
-                                </tr>
-                            </thead>
-                            <tbody id="funds-table-body" class="bg-white divide-y divide-gray-200">
-                                <tr id="no-data-table-row" style="display: none;">
-                                    <td colspan="11" class="px-6 py-10 text-center text-gray-500">לא נמצאו נתונים להצגה.</td>
-                                </tr>
-                            </tbody>
-                        </table>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">פירוט חשבונות/קרנות</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">ספק</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">שם התוכנית</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">סוג מוצר</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">יתרה</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">מסלול השקעה</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">ד"נ הפקדה (נטו)</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">ד"נ צבירה שנתית (נטו)</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">תוקף הטבה ד"נ</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">הפקדה אחרונה</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">ת. הפקדה אחרונה</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">שכר להפקדה אחרונה</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider ai-analysis-column">ניתוח AI</th>
+                            </tr>
+                        </thead>
+                        <tbody id="funds-table-body" class="bg-white divide-y divide-gray-200">
+                            <tr id="no-data-table-row" style="display: none;">
+                                <td colspan="12" class="px-6 py-10 text-center text-gray-500">לא נמצאו נתונים להצגה.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- API Key Input Section - Moved before footer -->
+        <section id="api-key-section" class="mt-12 mb-6 bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+                <label for="apiKeyInput" class="text-sm font-medium text-gray-700 shrink-0">מפתח Google AI API:</label>
+                <input type="password" id="apiKeyInput" class="flex-grow p-2 border border-gray-300 rounded-md text-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="הדבק כאן את מפתח ה-API שלך">
+                <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-sm text-indigo-600 hover:text-indigo-800 underline whitespace-nowrap">
+                    <i class="fas fa-key mr-1"></i>קבל מפתח API מ-Google AI Studio
+                </a>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">המפתח נשאר בדפדפן שלך בלבד ומשמש רק לקריאות ישירות ל-Google API. אם השדה ריק, יכולות הAI יהיו לא פעילים.</p>
+        </section>
+
+        <!-- Modal for AI Analysis -->
+        <div id="aiAnalysisModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close" id="modalCloseBtn">&times;</span>
+                <h3 id="modalTitle" class="text-xl font-semibold text-gray-800 mb-4">ניתוח Gemini AI</h3>   
+                <div id="modalBody" class="modal-body">
+                     <div class="modal-loader">
+                        <i class="fas fa-spinner fa-spin text-3xl text-indigo-500"></i>
                     </div>
                 </div>
             </div>
         </div>
 
+
         <footer class="mt-16 text-center text-gray-500 text-sm">
-            <p>כל העיבוד מתבצע בדפדפן שלך - שום מידע אינו נשלח לשרת כלשהו.</p>
-            <p class="mt-2">© 2023-2025 מנתח XML פנסיוני. פותח למטרות הדגמה ושימוש אישי.</p>
+            <p> כל העיבוד מתבצע בדפדפן שלך - שום מידע אינו נשלח לשרת כלשהו רק ביכולות הAI.</p>
+            <p class="mt-2">© 2025 Finely. פותח למטרות הדגמה ושימוש אישי.</p>
         </footer>
     </div>
 
@@ -295,10 +417,15 @@
             const processingIndicator = document.getElementById('processing-indicator');
             const noDataTableMessage = document.getElementById('no-data-table-row');
             const generalNoDataMessage = document.getElementById('no-data-message');
+            const aiAnalysisModal = document.getElementById('aiAnalysisModal');
+            const modalCloseBtn = document.getElementById('modalCloseBtn');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            const apiKeyInput = document.getElementById('apiKeyInput'); 
             
             // Global state
             let pieChart = null;
-            let allFundData = [];
+            let allFundData = []; 
 
             Chart.defaults.font.family = "'Inter', sans-serif";
             Chart.defaults.font.size = 12; 
@@ -348,6 +475,12 @@
             fileInput.addEventListener('change', handleFiles);
             printPdfBtn.addEventListener('click', () => window.print());
             exportCsvBtn.addEventListener('click', exportTableToCSV);
+            modalCloseBtn.addEventListener('click', () => aiAnalysisModal.style.display = "none");
+            window.addEventListener('click', function(event) {
+                if (event.target == aiAnalysisModal) {
+                    aiAnalysisModal.style.display = "none";
+                }
+            });
 
 
             function handleFiles(e) {
@@ -495,13 +628,11 @@
                 return productMap[code] || 'אחר';
             }
 
-            // Helper function to safely get text content from a node
             function getText(node, query, defaultValue = '') {
                 const el = node.querySelector(query);
                 return el && el.textContent ? el.textContent.trim() : defaultValue;
             }
 
-            // Helper function to safely get float attribute from a node
             function getFloat(node, query, defaultValue = 0) {
                 const el = node.querySelector(query);
                 return el && el.textContent ? parseFloat(el.textContent.trim()) : defaultValue;
@@ -512,8 +643,7 @@
                 const year = yyyymmdd.substring(0, 4);
                 const month = yyyymmdd.substring(4, 6);
                 const day = yyyymmdd.substring(6, 8);
-                // Check if day is valid (e.g., not '00')
-                if (day === '00') return `${month}/${year}`; // Only month/year if day is invalid
+                if (day === '00') return `${month}/${year}`; 
                 return `${day}/${month}/${year}`;
             }
             
@@ -524,6 +654,7 @@
                 return `${month}/${year}`;
             }
 
+            let fundCounter = 0; 
 
             function extractDataFromXML(xmlDoc) {
                 const funds = [];
@@ -542,9 +673,9 @@
 
                     const accounts = mutzarNode.querySelectorAll('HeshbonotOPolisot > HeshbonOPolisa');
                     accounts.forEach(accountNode => {
+                        const fundId = `fund-${fundCounter++}`; 
                         const productDisplayName = getText(accountNode, 'SHEM-TOCHNIT', genericProductType);
                         let currentBalance = 0;
-                        // Sum balances from all 'PirteiTaktziv' segments
                         const pirteiTaktzivNodes = accountNode.querySelectorAll('PirteiTaktziv');
                         pirteiTaktzivNodes.forEach(taktzivNode => {
                             const blockItrot = taktzivNode.querySelector('BlockItrot > Yitrot');
@@ -554,7 +685,6 @@
                                     currentBalance += parseFloat(yitraNode.textContent) || 0;
                                 });
                             }
-                            // Fallback if TOTAL-CHISACHON-MTZBR is not found or zero, sum SCHUM-TZVIRA-BAMASLUL
                             if (currentBalance === 0) {
                                 const masluleiHashkaaBalanceNodes = taktzivNode.querySelectorAll('PerutMasluleiHashkaa > SCHUM-TZVIRA-BAMASLUL');
                                 masluleiHashkaaBalanceNodes.forEach(schumNode => {
@@ -562,7 +692,6 @@
                                 });
                             }
                         });
-
 
                         let depositFee = 0;
                         let balanceFeeAnnual = 0; 
@@ -575,12 +704,8 @@
                         let lastDepositAmount = 0;
                         let lastDepositSalaryMonth = '-';
 
-
-                        // Use the first PirteiTaktziv for fees, track name, and last deposit.
-                        // This is a simplification as these could vary per Taktziv (employer segment)
                         const firstPirteiTaktziv = accountNode.querySelector('PirteiTaktziv');
                         if (firstPirteiTaktziv) {
-                            // Extract fees and benefits
                             const hotzaotNode = firstPirteiTaktziv.querySelector('PerutHotzaot > HotzaotBafoalLehodeshDivoach');
                             const mivneDmeiNihulNodes = firstPirteiTaktziv.querySelectorAll('PerutHotzaot > MivneDmeiNihul > PerutMivneDmeiNihul');
 
@@ -590,7 +715,6 @@
                                 balanceFeeAnnual = parseFloat((balanceFeeMonthly * 12).toFixed(4));
                             }
                             
-                            // Default effective fees to base fees
                             effectiveDepositFee = depositFee;
                             effectiveBalanceFeeAnnual = balanceFeeAnnual;
 
@@ -603,22 +727,14 @@
                                     const achozHatava = getFloat(mivneNode, 'ACHOZ-HATAVA');
                                     const sheurDmeiNihulEffective = sheurDmeiNihulBase * (1 - (achozHatava / 100));
                                     const endDate = formatDate(getText(mivneNode, 'TAARICH-SIUM-HATAVA'));
-                                    if (endDate !== '-') feeBenefitEndDate = endDate; // Take the latest benefit end date if multiple
+                                    if (endDate !== '-') feeBenefitEndDate = endDate; 
 
-                                    if (sugHotzaa === '1') { // דמי ניהול מצבירה
-                                        effectiveBalanceFeeAnnual = parseFloat((sheurDmeiNihulEffective / 100 * 12).toFixed(4)); // Assuming SHEUR-DMEI-NIHUL is annual for צבירה if SUG_HOTZAA is 1
-                                        // If SHEUR-DMEI-NIHUL under Mivne is monthly, then: sheurDmeiNihulEffective * 12
-                                        // The source XML usually provides SHEUR-DMEI-NIHUL as an annual rate for הצבירה in Mivne.
-                                        // Let's assume SHEUR-DMEI-NIHUL is annual for צבירה in Mivne if no better info
-                                        // But the HotzaotBafoalLehodeshDivoach.SHEUR-DMEI-NIHUL-TZVIRA is monthly.
-                                        // For simplicity, we'll use the calculation from HotzaotBafoal as primary if Mivne calculation isn't clear.
-                                        // Let's assume MivneDmeiNihul.SHEUR-DMEI-NIHUL for SUG-HOTZAA '1' (צבירה) is already an annual rate in percentage.
+                                    if (sugHotzaa === '1') { 
                                          effectiveBalanceFeeAnnual = parseFloat(sheurDmeiNihulEffective.toFixed(4));
-
-                                    } else if (sugHotzaa === '2') { // דמי ניהול מהפקדה
+                                    } else if (sugHotzaa === '2') { 
                                         effectiveDepositFee = parseFloat(sheurDmeiNihulEffective.toFixed(4));
                                     }
-                                } else { // No benefit, use base rate from Mivne if available and different from HotzaotBafoal
+                                } else { 
                                     if (sugHotzaa === '1') effectiveBalanceFeeAnnual = parseFloat(sheurDmeiNihulBase.toFixed(4));
                                     else if (sugHotzaa === '2') effectiveDepositFee = parseFloat(sheurDmeiNihulBase.toFixed(4));
                                 }
@@ -630,12 +746,10 @@
                                 trackName = trackNode.textContent.trim() || 'ברירת מחדל';
                             }
 
-                            // Extract Last Deposit Info
                             const hafkadaAchronaBlock = firstPirteiTaktziv.querySelector('PirteiHafkadaAchrona > PerutPirteiHafkadaAchrona');
                             if (hafkadaAchronaBlock) {
                                 lastDepositDate = formatYearMonth(getText(hafkadaAchronaBlock, 'TAARICH-HAFKADA-ACHARON'));
                                 lastDepositAmount = getFloat(hafkadaAchronaBlock, 'TOTAL-HAFKADA-ACHRONA');
-                                // Get CHODESH-SACHAR from the first PerutHafkadaAchrona
                                 const chodeshSacharNode = hafkadaAchronaBlock.querySelector('PerutHafkadaAchrona > CHODESH-SACHAR');
                                 if(chodeshSacharNode && chodeshSacharNode.textContent){
                                     lastDepositSalaryMonth = formatYearMonth(chodeshSacharNode.textContent.trim());
@@ -645,20 +759,17 @@
                         
                         if (currentBalance > 0 || (genericProductType !== 'אחר' && productDisplayName !== 'אחר')) {
                             funds.push({
+                                id: fundId, 
                                 provider: providerName,
                                 productDisplayName: productDisplayName,
                                 productType: genericProductType,
                                 balance: currentBalance,
-                                // Base fees (from HotzaotBafoal as primary for display consistency)
                                 depositFee: depositFee, 
                                 balanceFee: balanceFeeAnnual,
-                                // Effective fees after benefit
                                 effectiveDepositFee: effectiveDepositFee,
                                 effectiveBalanceFee: effectiveBalanceFeeAnnual,
                                 feeBenefitEndDate: feeBenefitEndDate,
-                                // Track
                                 trackName: trackName,
-                                // Last Deposit
                                 lastDepositDate: lastDepositDate,
                                 lastDepositAmount: lastDepositAmount,
                                 lastDepositSalaryMonth: lastDepositSalaryMonth
@@ -741,8 +852,162 @@
                         
                         row.insertCell().textContent = fund.lastDepositSalaryMonth;
                         row.cells[10].className = 'px-4 py-2 text-gray-600';
+
+                        const aiCell = row.insertCell();
+                        aiCell.className = 'px-4 py-2 text-center space-y-1 ai-analysis-column';
+
+                        const analyzeFeesBtn = document.createElement('button');
+                        analyzeFeesBtn.innerHTML = `<i class="fas fa-percentage mr-1"></i> ✨ נתח ד"נ`;
+                        analyzeFeesBtn.className = 'button-ai w-full mb-1';
+                        analyzeFeesBtn.onclick = () => handleAiAnalysis('fees', fund.id);
+                        aiCell.appendChild(analyzeFeesBtn);
+
+                        const explainTrackBtn = document.createElement('button');
+                        explainTrackBtn.innerHTML = `<i class="fas fa-route mr-1"></i> ✨ הסבר מסלול`;
+                        explainTrackBtn.className = 'button-ai w-full';
+                        explainTrackBtn.onclick = () => handleAiAnalysis('track', fund.id);
+                        aiCell.appendChild(explainTrackBtn);
                     });
             }
+
+            function formatGeminiResponse(text) {
+                let html = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                html = html.replace(/_(.*?)_/g, '<em>$1</em>');
+
+                const lines = html.split('\n');
+                let inList = false;
+                let listType = ''; 
+                let processedHtml = '';
+
+                lines.forEach(line => {
+                    line = line.trim();
+                    if (!line) return; 
+
+                    const listItemMatch = line.match(/^(\*|-|\d+\.)\s+(.*)/);
+                    if (listItemMatch) {
+                        const itemContent = listItemMatch[2];
+                        const marker = listItemMatch[1];
+                        
+                        if (!inList) { 
+                            listType = (marker === '*' || marker === '-') ? 'ul' : 'ol';
+                            processedHtml += `<${listType} class="list-disc list-inside mr-4 mb-2">`;
+                            inList = true;
+                        } else if ((listType === 'ul' && (marker !== '*' && marker !== '-')) || (listType === 'ol' && !marker.match(/^\d+\./))) {
+                            processedHtml += `</${listType}>`;
+                            listType = (marker === '*' || marker === '-') ? 'ul' : 'ol';
+                            processedHtml += `<${listType} class="list-disc list-inside mr-4 mb-2">`;
+                        }
+                        processedHtml += `<li>${itemContent}</li>`;
+                    } else {
+                        if (inList) { 
+                            processedHtml += `</${listType}>`;
+                            inList = false;
+                        }
+                        if (line.startsWith('<strong>') && line.endsWith('</strong>') && line.length < 100) { 
+                             processedHtml += `<h4 class="text-md font-semibold mt-3 mb-1">${line.replace(/<\/?strong>/g, '')}</h4>`;
+                        } else {
+                            processedHtml += `<p class="mb-2">${line}</p>`;
+                        }
+                    }
+                });
+
+                if (inList) { 
+                    processedHtml += `</${listType}>`;
+                }
+                return processedHtml;
+            }
+
+            async function callGeminiAPI(prompt) {
+                modalBody.innerHTML = `<div class="modal-loader"><i class="fas fa-spinner fa-spin text-3xl text-indigo-500"></i></div>`;
+                aiAnalysisModal.style.display = "flex"; 
+
+                let userApiKey = apiKeyInput.value.trim(); 
+                let finalApiKey = userApiKey ? userApiKey : ""; 
+
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${finalApiKey}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error("Gemini API Error:", errorData);
+                        throw new Error(`שגיאת API: ${response.status} ${response.statusText}. ${errorData?.error?.message || ''}`);
+                    }
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        const formattedContent = formatGeminiResponse(text);
+                        const disclaimer = `<div class="modal-disclaimer"><p><strong>לתשומת לבך:</strong> המידע המוצג כאן הוא ניתוח כללי המבוסס על נתונים מוגבלים ואינו מהווה ייעוץ פנסיוני, פיננסי או תחליף לייעוץ מקצועי מיועץ מוסמך. המידע ניתן למטרות אינפורמטיביות בלבד.</p></div>`;
+                        modalBody.innerHTML = `<div class="prose prose-sm max-w-none rtl">${formattedContent}</div>${disclaimer}`;
+                    } else {
+                        console.error("Unexpected Gemini API response structure:", result);
+                        throw new Error("תשובת API לא צפויה או ריקה.");
+                    }
+                } catch (error) {
+                    console.error("שגיאה בקריאה ל-Gemini API:", error);
+                    modalBody.innerHTML = `<p class="text-red-600">אירעה שגיאה: ${error.message}</p><p>אנא בדוק את חיבור האינטרנט שלך או נסה שוב מאוחר יותר.</p>`;
+                }
+            }
+
+
+            function handleAiAnalysis(type, fundId) {
+                const fund = allFundData.find(f => f.id === fundId);
+                if (!fund) {
+                    console.error("Fund not found for AI analysis:", fundId);
+                    modalTitle.textContent = "שגיאה";
+                    modalBody.innerHTML = "<p>הקרן המבוקשת לא נמצאה.</p>";
+                    aiAnalysisModal.style.display = "flex";
+                    return;
+                }
+
+                let prompt = "";
+                if (type === 'fees') {
+                    modalTitle.textContent = `ניתוח דמי ניהול עבור: ${fund.productDisplayName}`;
+                    prompt = `
+                    נתח את דמי הניהול הבאים עבור מוצר פנסיוני מסוג "${fund.productType}" בישראל. 
+                    שם התוכנית: ${fund.productDisplayName}.
+                    דמי ניהול מהפקדה (נטו): ${fund.effectiveDepositFee}%.
+                    דמי ניהול שנתיים מהצבירה (נטו): ${fund.effectiveBalanceFee}%.
+                    תוקף הטבה בדמי ניהול: ${fund.feeBenefitEndDate}.
+
+                    בעברית פשוטה וללא הקדמות מיותרות או הצגה עצמית, אנא ספק:
+                    1. הערכה האם דמי ניהול אלו גבוהים, נמוכים או ממוצעים ביחס לשוק בישראל עבור סוג מוצר זה.
+                    2. נקודות עיקריות לשים לב אליהן (כגון תוקף הטבה).
+                    3. המלצות כלליות לבדיקה נוספת (לא ייעוץ פיננסי אישי).
+
+                    הצג את התשובה כטקסט פשוט, ללא סימני Markdown אם אפשר, והתמקד בתשובה הישירה ללא הקדמות על תפקידך.
+                    `;
+                } else if (type === 'track') {
+                    modalTitle.textContent = `הסבר על מסלול השקעה: ${fund.trackName}`;
+                    prompt = `
+                    הסבר בעברית פשוטה על מסלול השקעה בשם "${fund.trackName}". 
+                    סוג המוצר הפנסיוני הוא "${fund.productType}".
+
+                    ללא הקדמות מיותרות או הצגה עצמית, אנא ספק:
+                    1. מאפיינים עיקריים של מסלול כזה (סוגי נכסים).
+                    2. רמת סיכון כללית אופיינית.
+                    3. למי בדרך כלל מתאים מסלול כזה.
+
+                    הצג את התשובה כטקסט פשוט, ללא סימני Markdown אם אפשר, והתמקד בתשובה הישירה ללא הקדמות על תפקידך.
+                    `;
+                }
+                callGeminiAPI(prompt);
+            }
+
+
 
             function initEmptyChart() {
                 const ctx = document.getElementById('pieChart').getContext('2d');
